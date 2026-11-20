@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOKABERUKA - Know Your Marks</title>
+
+<style>
+/* Reset and base styling */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f1f5f9;color:#1e293b}
+header{background:#102b50;color:white;padding:22px;text-align:center;position:relative}
+header h1{font-size:25px;margin-bottom:8px}
+header p{color:#bfdbfe}
+
+/* Bilingual switcher in header */
+.lang-switch-wrap{
+  position:absolute;
+  top:14px;
+  right:16px;
+  display:flex;
+  gap:6px;
+}
+.lang-btn{
+  background:#1e40af;
+  color:white;
+  border:1px solid #93c5fd;
+  padding:6px 11px;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:12px;
+}
+.lang-btn.active, .lang-btn:hover{
+  background:#22c55e;
+  color:#052e16;
+  border-color:#bbf7d0;
+}
+
+/* Navigation bar */
+nav{background:#174477;padding:12px;text-align:center}
+nav button{background:transparent;color:white;border:none;padding:10px 15px;cursor:pointer;font-weight:bold;border-radius:5px}
+nav button:hover{background:#2563eb}
+
+/* Layout container and cards */
+.container{max-width:1000px;margin:30px auto;padding:20px}
+.card{background:white;padding:25px;border-radius:12px;box-shadow:0 3px 12px #00000012;margin-bottom:20px}
+h2{color:#174477;margin-bottom:15px}
+h3{color:#102b50;margin:15px 0 10px}
+
+/* Inputs and action buttons */
+input,select,textarea{width:100%;padding:12px;margin:8px 0 15px;border:1px solid #cbd5e1;border-radius:6px;font-family:inherit}
+button.main{background:#174477;color:white;border:none;padding:12px 20px;border-radius:6px;cursor:pointer;margin:5px 0;font-weight:bold}
+button.main:hover{background:#2563eb}
+button.success{background:#15803d;color:white;border:none;padding:12px 20px;border-radius:6px;cursor:pointer;margin:5px 0;font-weight:bold}
+button.success:hover{background:#166534}
+.hidden{display:none !important}
+
+/* Status boxes and tables */
+.stat{background:#e0ecff;padding:20px;border-radius:8px;margin:10px 0}
+.pass{color:green;font-weight:bold}
+.fail{color:red;font-weight:bold}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{border:1px solid #cbd5e1;padding:10px;text-align:left}
+th{background:#174477;color:white}
+td input{margin:0;padding:8px;width:120px}
+footer{text-align:center;padding:20px;background:#102b50;color:white;margin-top:40px}
+.small{color:#64748b;font-size:13px}
+.table-wrap{overflow-x:auto}
+
+/* Subject badges */
+.badge-gen{display:inline-block;background:#fef3c7;color:#92400e;border:1px solid #f59e0b;font-size:11px;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:bold}
+.badge-core{display:inline-block;background:#dbeafe;color:#1e40af;border:1px solid #3b82f6;font-size:11px;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:bold}
+
+/* TRADE & LEVEL LINKS STYLING */
+.trade-links, .level-links{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.trade-link, .level-link{
+  display:inline-block;
+  background:#e0ecff;
+  color:#174477;
+  padding:10px 18px;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:bold;
+  border:2px solid #174477;
+  transition:0.2s;
+  cursor:pointer;
+}
+.level-link{
+  background:#f1f5f9;
+  border-color:#0284c7;
+  color:#0369a1;
+  padding:8px 15px;
+}
+.trade-link:hover, .trade-link.active{
+  background:#174477;
+  color:white;
+}
+.level-link:hover, .level-link.active{
+  background:#0284c7;
+  color:white;
+}
+.form-box{
+  border:2px solid #cbd5e1;
+  background:#f8fafc;
+  padding:20px;
+  border-radius:10px;
+  margin-top:15px;
+}
+.report-link-wrap{
+  margin-top:20px;
+  padding-top:15px;
+  border-top:2px dashed #cbd5e1;
+  text-align:center;
+}
+.report-link{
+  display:inline-block;
+  background:#174477;
+  color:white;
+  padding:14px 24px;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:16px;
+  cursor:pointer;
+}
+.report-link:hover{background:#2563eb}
+
+/* MODAL STYLING */
+.modal-overlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(15,23,42,0.65);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;padding:15px;
+}
+.modal-box{
+  background:white;padding:25px;border-radius:12px;
+  max-width:480px;width:100%;box-shadow:0 10px 25px rgba(0,0,0,0.3);
+  max-height:90vh;overflow-y:auto;
+}
+.alert-download{
+  background:#dcfce7;border:2px solid #15803d;color:#14532d;
+  padding:18px;border-radius:8px;margin-top:15px;text-align:center;
+}
+
+/* Inline feedback toast banner */
+.toast-banner{
+  position:fixed;
+  top:18px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:2000;
+  padding:12px 20px;
+  border-radius:8px;
+  font-weight:bold;
+  font-size:14px;
+  box-shadow:0 8px 22px rgba(0,0,0,0.22);
+  max-width:92vw;
+  text-align:center;
+}
+.toast-info{background:#174477;color:white;border:1px solid #93c5fd}
+.toast-success{background:#15803d;color:white;border:1px solid #86efac}
+.toast-error{background:#b91c1c;color:white;border:1px solid #fca5a5}
+
+/* FLOATING CHAT WIDGET STYLING */
+.chat-launcher{
+  position:fixed;
+  bottom:22px;
+  right:22px;
+  background:#15803d;
+  color:white;
+  border:none;
+  padding:14px 20px;
+  border-radius:50px;
+  font-weight:bold;
+  font-size:15px;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,0.28);
+  z-index:1100;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.chat-launcher:hover{background:#166534}
+.chat-badge{
+  background:#dc2626;
+  color:white;
+  font-size:12px;
+  padding:2px 7px;
+  border-radius:50%;
+  font-weight:bold;
+}
+.chat-widget{
+  position:fixed;
+  bottom:82px;
+  right:22px;
+  width:350px;
+  max-width:calc(100vw - 30px);
+  background:white;
+  border-radius:14px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.25);
+  border:1px solid #cbd5e1;
+  z-index:1100;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.chat-header{
+  background:#102b50;
+  color:white;
+  padding:14px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.chat-header button{
+  background:transparent;
+  border:none;
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.chat-body{
+  padding:14px;
+  height:290px;
+  overflow-y:auto;
+  background:#f8fafc;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.msg-bubble{
+  max-width:82%;
+  padding:10px 12px;
+  border-radius:10px;
+  font-size:13.5px;
+  line-height:1.4;
+  word-wrap:break-word;
+}
+.msg-user{
+  align-self:flex-end;
+  background:#174477;
+  color:white;
+  border-bottom-right-radius:2px;
+}
+.msg-admin{
+  align-self:flex-start;
+  background:#e2e8f0;
+  color:#0f172a;
+  border-bottom-left-radius:2px;
+}
+.msg-meta{
+  font-size:10.5px;
+  opacity:0.75;
+  margin-top:4px;
+  display:block;
+}
+.chat-footer{
+  padding:10px;
+  border-top:1px solid #cbd5e1;
+  background:white;
+}
+.chat-footer input{
+  margin:0 0 8px 0;
+  padding:9px;
+  font-size:13px;
+}
+.chat-input-row{
+  display:flex;
+  gap:6px;
+}
+.chat-input-row input{
+  margin:0;
+  flex:1;
+}
+.chat-input-row button{
+  background:#174477;
+  color:white;
+  border:none;
+  padding:0 14px;
+  border-radius:6px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.chat-input-row button:hover{background:#2563eb}
+
+/* ADMIN INBOX STYLING */
+.admin-msg-thread{
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  padding:15px;
+  margin-bottom:15px;
+  background:#f8fafc;
+}
+.admin-msg-thread.unread{
+  border-left:5px solid #dc2626;
+  background:#fffbeb;
+}
+.admin-thread-history{
+  max-height:220px;
+  overflow-y:auto;
+  background:white;
+  border:1px solid #e2e8f0;
+  border-radius:8px;
+  padding:10px;
+  margin:10px 0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+@media(max-width:600px){
+.container{padding:12px}
+table{font-size:12px}
+th,td{padding:6px}
+td input{width:85px}
+.lang-switch-wrap{position:static;justify-content:center;margin-bottom:10px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="toastBanner" class="toast-banner toast-info hidden" role="status" aria-live="polite"></div>
+
+<header>
+  <div class="lang-switch-wrap" aria-label="Language Selector">
+    <button type="button" id="btnLangRW" class="lang-btn active" onclick="setLanguage('rw')">🇷🇼 RW</button>
+    <button type="button" id="btnLangEN" class="lang-btn" onclick="setLanguage('en')">🇬🇧 EN</button>
+  </div>
+  <h1 data-i18n="headerTitle">TOKABERUKA WEBSITE ONLINE</h1>
+  <p data-i18n="headerSubtitle">TRY TO KNOW YOUR MARKS</p>
+</header>
+
+<nav>
+  <button type="button" onclick="showPage('home')" data-i18n="navHome">HOME</button>
+  <button type="button" onclick="showPage('register')" data-i18n="navRegister">REGISTER</button>
+  <button type="button" onclick="showPage('login')" data-i18n="navLogin">LOGIN</button>
+  <button type="button" id="navDashboardBtn" class="hidden" onclick="goToDashboard()" data-i18n="navDashboard">MY DASHBOARD</button>
+  <button type="button" id="navLogoutBtn" class="hidden" onclick="logout()" data-i18n="navLogout">LOGOUT</button>
+</nav>
+
+<div class="container">
+
+<!-- HOME PAGE -->
+<section id="home" class="card">
+  <h2 data-i18n="homeWelcomeTitle">Murakaza neza kuri Tokaberuka Website</h2>
+  <p data-i18n="homeWelcomeDesc">Uru rubuga rufasha abanyeshuri kwandika no kureba amanota yabo, kureba amashami (Trades) n'inzego (Levels) zose, no gukora raporo yemewe.</p>
+  <br>
+  <button type="button" class="main" onclick="showPage('register')" data-i18n="btnCreateAccount">Create Account</button>
+  <button type="button" class="main" onclick="showPage('login')" data-i18n="btnLogin">Login</button>
+
+  <hr style="margin:25px 0;border:none;border-top:1px solid #cbd5e1">
+
+  <h2 data-i18n="homeTradesTitle">All Trades &amp; Levels (Kanda kuri Trade hanyuma ku Level urebe amasomo)</h2>
+  <p class="small" data-i18n="homeTradesDesc">Hitamo ishami (Trade) hasi, hanyuma ukande ku rwego (Level 3, Level 4, Level 5) kugira ngo ubone amasomo y'umwuga (Trade) n'amasomo ya General:</p>
+
+  <div class="trade-links" id="homeTradeLinks">
+    <a href="#trade-NIT" class="trade-link" data-trade="NIT" onclick="selectHomeTrade('NIT', event)">NIT (Networking &amp; Internet Tech)</a>
+    <a href="#trade-BDC" class="trade-link" data-trade="BDC" onclick="selectHomeTrade('BDC', event)">BDC (Building &amp; Construction)</a>
+    <a href="#trade-ACCOUNTING" class="trade-link" data-trade="ACCOUNTING" onclick="selectHomeTrade('ACCOUNTING', event)">ACCOUNTING</a>
+  </div>
+
+  <div id="homeLevelBar" class="hidden">
+    <p class="small" style="margin-top:10px"><b data-i18n="chooseLevelIn">Hitamo Level muri</b> <span id="homeSelectedTradeLabel"></span>:</p>
+    <div id="homeLevelLinks" class="level-links"></div>
+  </div>
+
+  <div id="homeTradeDetails" class="form-box hidden"></div>
+</section>
+
+<!-- REGISTER PAGE -->
+<section id="register" class="card hidden">
+  <h2 data-i18n="regTitle">Student Registration</h2>
+
+  <form id="registerForm">
+    <label for="regName" data-i18n="lblFullName">Full Name (Amazina yawe yose)</label>
+    <input id="regName" required placeholder="Andika amazina yawe yose">
+
+    <label for="regSchool" data-i18n="lblSchoolName">School Name (Ikigo wigaho)</label>
+    <input id="regSchool" required placeholder="Andika izina ry'ikigo wigaho (Urugero: TSS Kigali)">
+
+    <label for="regEmail" data-i18n="lblEmail">Email</label>
+    <input id="regEmail" type="email" required placeholder="Enter email">
+
+    <label for="regPassword" data-i18n="lblPassword">Password</label>
+    <input id="regPassword" type="password" required minlength="4" placeholder="Create password">
+
+    <label for="regTrade" data-i18n="lblTrade">Trade (Ishami wiga)</label>
+    <select id="regTrade" required onchange="populateRegisterLevels(this.value)">
+      <option value="">Select Trade</option>
+      <option value="NIT">NIT</option>
+      <option value="BDC">BDC</option>
+      <option value="ACCOUNTING">ACCOUNTING</option>
+    </select>
+
+    <label for="regLevel" data-i18n="lblLevel">Level (Urwego)</label>
+    <select id="regLevel" required>
+      <option value="">Select Trade First</option>
+    </select>
+
+    <button class="main" type="submit" data-i18n="btnCreateAccount">Create Account</button>
+  </form>
+</section>
+
+<!-- LOGIN PAGE -->
+<section id="login" class="card hidden">
+  <h2 data-i18n="loginTitle">Login to Your Account</h2>
+  <form id="loginForm" novalidate>
+    <label for="loginEmail" data-i18n="lblEmail">Email</label>
+    <input id="loginEmail" type="email" required placeholder="Andika Email yawe (Student cyangwa Admin)">
+    <label for="loginPassword" data-i18n="lblPassword">Password</label>
+    <input id="loginPassword" type="password" required placeholder="Andika Password yawe">
+    <button class="main" type="submit" data-i18n="btnLogin">Login</button>
+  </form>
+  <p class="small" id="loginAdminHint" style="margin-top:10px"></p>
+</section>
+
+<!-- STUDENT DASHBOARD -->
+<section id="studentDashboard" class="hidden">
+  <div class="card">
+    <h2 data-i18n="studentDashTitle">Student Dashboard</h2>
+    <p id="studentWelcome" style="font-size:18px;font-weight:bold"></p>
+    <div class="stat">
+      <p id="studentSchool"></p>
+      <p id="studentTrade"></p>
+      <p id="studentLevel"></p>
+      <h3 id="studentTotal">Total: 0</h3>
+      <h3 id="studentAverage">Average: Not available</h3>
+      <p id="studentStatus"></p>
+    </div>
+  </div>
+
+  <!-- ALL TRADES & LEVELS LINKS INSIDE STUDENT PORTAL -->
+  <div class="card">
+    <h2 data-i18n="dashExploreTitle">Explore All Trades &amp; Levels (Amasomo yose ku ma Level)</h2>
+    <p class="small" data-i18n="dashExploreDesc">Kanda kuri Trade hanyuma ukande kuri Level (<b>L3</b>, <b>L4</b>, <b>L5</b>) kugira ngo ubone amasomo yayo yose:</p>
+    <div class="trade-links" id="dashTradeLinks">
+      <a href="#dash-NIT" class="trade-link" data-trade="NIT" onclick="selectDashTrade('NIT', event)">NIT</a>
+      <a href="#dash-BDC" class="trade-link" data-trade="BDC" onclick="selectDashTrade('BDC', event)">BDC</a>
+      <a href="#dash-ACCOUNTING" class="trade-link" data-trade="ACCOUNTING" onclick="selectDashTrade('ACCOUNTING', event)">ACCOUNTING</a>
+    </div>
+    <div id="dashLevelBar" class="hidden">
+      <p class="small" style="margin-top:10px"><b data-i18n="chooseLevelIn">Hitamo Level muri</b> <span id="dashSelectedTradeLabel"></span>:</p>
+      <div id="dashLevelLinks" class="level-links"></div>
+    </div>
+    <div id="dashboardTradeSubjects" class="form-box hidden"></div>
+  </div>
+
+  <!-- STUDENT MARKS FORM & REPORT LINK -->
+  <div class="card">
+    <h2 data-i18n="marksFormTitle">Academic Marks Form (Andika Amanota Yawe Muri System)</h2>
+    <p class="small" data-i18n="marksFormDesc">Andika amanota yawe (0 - 100) kuri buri somo hasi, hanyuma ukande <b>Save My Marks &amp; Calculate Total</b> kugira ngo ubone Total yawe no gukora Report.</p>
+    <div class="form-box">
+      <p><b data-i18n="lblStudentName">Student Name:</b> <span id="formStudentName"></span></p>
+      <p><b data-i18n="lblSchool">School Name:</b> <span id="formStudentSchool"></span></p>
+      <p><b data-i18n="lblTradeLevel">Trade &amp; Level:</b> <span id="formStudentTradeLevel"></span></p>
+
+      <div id="studentResults" class="table-wrap"></div>
+      <br>
+      <button type="button" class="success" onclick="saveOwnStudentMarks()" data-i18n="btnSaveMarks">💾 Save My Marks &amp; Calculate Total</button>
+
+      <!-- LINK YO GUKORA REPORT HASI -->
+      <div class="report-link-wrap">
+        <a href="#generate-report" class="report-link" onclick="openAdminAuthModal(event)" data-i18n="btnGenReportLink">
+          📄 Generate Your Academic Report Automatically
+        </a>
+        <p class="small" style="margin-top:8px" data-i18n="genReportHint">Iyo ukanze hano, ushyiramo Admin Email na Password kugira ngo report ikorwe kandi ihite igusaba gukora Download.</p>
+      </div>
+
+      <!-- DOWNLOAD BOX APPEARS AFTER REPORT GENERATION -->
+      <div id="downloadReadyBox" class="alert-download hidden">
+        <h3 data-i18n="reportReadyTitle">✅ Report yawe yatunganyijwe neza!</h3>
+        <p id="downloadSummaryText" style="margin:8px 0"></p>
+        <button type="button" class="success" onclick="downloadReportFile()" data-i18n="btnDownloadReport">⬇️ Download Report Y'Amanota Yawe</button>
+        <button type="button" class="main" onclick="printReportWindow()" data-i18n="btnPrintPdf">🖨️ Print / Save as PDF</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN DASHBOARD -->
+<section id="adminDashboard" class="hidden">
+  <div class="card">
+    <h2 data-i18n="adminDashTitle">Admin Dashboard</h2>
+    <p data-i18n="adminWelcome">Welcome, Administrator.</p>
+    <div class="stat">
+      <h3 id="totalStudents">Registered Students: 0</h3>
+      <p id="currentAdminDisplay" class="small"></p>
+    </div>
+  </div>
+
+  <!-- ADMIN MESSAGES INBOX -->
+  <div class="card">
+    <h2 data-i18n="adminInboxTitle">💬 Ubutumwa bw'abantu (Messages &amp; Replies)</h2>
+    <p class="small" style="margin-bottom:12px" data-i18n="adminInboxDesc">Hano ubona ubutumwa bwose bwoherejwe n'abantu binjiye ku rubuga. Andika igisubizo hasi kuri buri wese ukande <b>Subiza (Reply)</b>.</p>
+    <div id="adminMessagesContainer"></div>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="manageMarksTitle">Manage Student Marks</h2>
+
+    <label for="adminStudent" data-i18n="lblSelectStudent">Select Student</label>
+    <select id="adminStudent" onchange="loadStudentMarks()">
+      <option value="">Select student</option>
+    </select>
+
+    <div id="adminStudentResults" class="table-wrap"></div>
+    <br>
+    <button type="button" class="main" onclick="saveAllMarks()" data-i18n="btnSaveUpdateMarks">SAVE / UPDATE MARKS</button>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="regStudentsTitle">Registered Students</h2>
+    <div id="studentsList" class="table-wrap"></div>
+  </div>
+</section>
+
+</div>
+
+<!-- FLOATING USER CHAT WIDGET -->
+<button type="button" id="chatLauncherBtn" class="chat-launcher" onclick="toggleChatWidget()">
+  <span data-i18n="chatLauncher">💬 Andikira Admin</span> <span id="userUnreadBadge" class="chat-badge hidden">0</span>
+</button>
+
+<div id="userChatWidget" class="chat-widget hidden">
+  <div class="chat-header">
+    <div>
+      <strong data-i18n="chatHeaderTitle">💬 Vugana na Admin</strong>
+      <div style="font-size:11px;color:#bfdbfe" data-i18n="chatHeaderSub">Andika ikibazo cyawe, Admin aragusubiza</div>
+    </div>
+    <button type="button" onclick="toggleChatWidget()" title="Close">✕</button>
+  </div>
+  <div id="userChatMessages" class="chat-body"></div>
+  <div class="chat-footer">
+    <input type="text" id="guestSenderName" placeholder="Andika izina ryawe (Urugero: Jean)..." />
+    <div class="chat-input-row">
+      <input type="text" id="userChatInput" placeholder="Andika ubutumwa bwawe..." onkeydown="if(event.key==='Enter'){event.preventDefault();sendUserMessage();}" />
+      <button type="button" onclick="sendUserMessage()" data-i18n="btnSend">Ohereza</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN AUTH MODAL FOR REPORT GENERATION -->
+<div id="adminAuthModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h2 data-i18n="modalVerifyTitle">Admin Verification &amp; Report</h2>
+    <p class="small" style="margin-bottom:12px" data-i18n="modalVerifyDesc">Shyiramo <b>Admin Email</b> na <b>Password</b> kugira ngo report ikorwe:</p>
+
+    <form id="adminVerifyForm">
+      <label for="verifyAdminEmail" data-i18n="lblAdminEmail">Admin Email</label>
+      <input type="email" id="verifyAdminEmail" required placeholder="Andika Admin Email">
+      <label for="verifyAdminPassword" data-i18n="lblAdminPass">Admin Password</label>
+      <input type="password" id="verifyAdminPassword" required placeholder="Andika Admin Password">
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button type="button" class="main" style="background:#64748b" onclick="closeAdminAuthModal()" data-i18n="btnCancel">Cancel</button>
+        <button type="submit" class="success" data-i18n="btnVerifyGen">Verify &amp; Generate Report</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <p data-i18n="footerTitle">TOKABERUKA WEBSITE ONLINE</p>
+  <p data-i18n="footerCopy">TRY TO KNOW YOUR MARKS © 2026</p>
+</footer>
+
+<script>
+/* =========================================================
+   TRANSLATIONS (KINYARWANDA <-> ENGLISH)
+   ========================================================= */
+const TRANSLATIONS = {
+  rw: {
+    headerTitle: "TOKABERUKA WEBSITE ONLINE",
+    headerSubtitle: "GERAGEZA KUMENYA AMANOTA YAWE",
+    navHome: "AHABANZA",
+    navRegister: "IYANDIKISHE",
+    navLogin: "INJIRA",
+    navDashboard: "DASHBOARD YANJYE",
+    navLogout: "SOHOKA",
+    homeWelcomeTitle: "Murakaza neza kuri Tokaberuka Website",
+    homeWelcomeDesc: "Uru rubuga rufasha abanyeshuri kwandika no kureba amanota yabo, kureba amashami (Trades) n'inzego (Levels) zose, no gukora raporo yemewe.",
+    btnCreateAccount: "Fungura Konti",
+    btnLogin: "Injira (Login)",
+    homeTradesTitle: "Amashami yose & Inzego (Kanda kuri Trade hanyuma ku Level urebe amasomo)",
+    homeTradesDesc: "Hitamo ishami (Trade) hasi, hanyuma ukande ku rwego (Level 3, Level 4, Level 5) kugira ngo ubone amasomo y'umwuga (Trade) n'amasomo ya General:",
+    chooseLevelIn: "Hitamo Level muri",
+    regTitle: "Kwiyandikisha k'Umunyeshuri",
+    lblFullName: "Amazina yawe yose",
+    lblSchoolName: "Izina ry'ikigo wigaho",
+    lblEmail: "Imeli (Email)",
+    lblPassword: "Ijambo banga (Password)",
+    lblTrade: "Ishami wiga (Trade)",
+    lblLevel: "Urwego (Level)",
+    loginTitle: "Injira muri Konti Yawe",
+    lblAdminEmail: "Admin Email",
+    lblAdminPass: "Admin Password",
+    studentDashTitle: "Dashboard y'Umunyeshuri",
+    dashExploreTitle: "Reba Amashami yose & Inzego (Amasomo yose ku ma Level)",
+    dashExploreDesc: "Kanda kuri Trade hanyuma ukande kuri Level (<b>L3</b>, <b>L4</b>, <b>L5</b>) kugira ngo ubone amasomo yayo yose:",
+    marksFormTitle: "Ifishi y'Amanota (Andika Amanota Yawe Muri System)",
+    marksFormDesc: "Andika amanota yawe (0 - 100) kuri buri somo hasi, hanyuma ukande <b>Bika Amanota &amp; Ubare Total</b> kugira ngo ubone Total yawe no gukora Report.",
+    lblStudentName: "Amazina y'Umunyeshuri:",
+    lblSchool: "Ikigo:",
+    lblTradeLevel: "Ishami & Urwego:",
+    btnSaveMarks: "💾 Bika Amanota & Ubare Total",
+    btnGenReportLink: "📄 Kora Raporo Y'Amanota Yawe Byikora",
+    genReportHint: "Iyo ukanze hano, ushyiramo Admin Email na Password kugira ngo report ikorwe kandi ihite igusaba gukora Download.",
+    reportReadyTitle: "✅ Report yawe yatunganyijwe neza!",
+    btnDownloadReport: "⬇️ Kuramo Report (Download)",
+    btnPrintPdf: "🖨️ Sosa / Bika nka PDF",
+    adminDashTitle: "Dashboard ya Admin",
+    adminWelcome: "Murakaza neza, Administrator.",
+    adminInboxTitle: "💬 Ubutumwa bw'abantu (Subiza Abanditse)",
+    adminInboxDesc: "Hano ubona ubutumwa bwose bwoherejwe n'abantu binjiye ku rubuga. Andika igisubizo hasi kuri buri wese ukande <b>Subiza</b>.",
+    manageMarksTitle: "Gucunga Amanota y'Abanyeshuri",
+    lblSelectStudent: "Hitamo Umunyeshuri",
+    btnSaveUpdateMarks: "BIKA / VUGURURA AMANOTA",
+    regStudentsTitle: "Abanyeshuri Biyandikishije",
+    chatLauncher: "💬 Andikira Admin",
+    chatHeaderTitle: "💬 Vugana na Admin",
+    chatHeaderSub: "Andika ikibazo cyawe, Admin aragusubiza",
+    btnSend: "Ohereza",
+    modalVerifyTitle: "Kwemeza Admin & Gukora Report",
+    modalVerifyDesc: "Shyiramo <b>Admin Email</b> na <b>Password</b> kugira ngo report ikorwe:",
+    btnCancel: "Hagarika",
+    btnVerifyGen: "Emeza & Ukore Report",
+    footerTitle: "TOKABERUKA WEBSITE ONLINE",
+    footerCopy: "GERAGEZA KUMENYA AMANOTA YAWE © 2026",
+    phGuestName: "Andika izina ryawe (Urugero: Jean)...",
+    phChatMsg: "Andika ubutumwa bwawe...",
+    chatDefaultGreeting: "Muraho! Andika ubutumwa bwawe hano hasi, Admin arabubona ahite agusubiza.",
+    replyBtn: "Subiza"
+  },
+  en: {
+    headerTitle: "TOKABERUKA WEBSITE ONLINE",
+    headerSubtitle: "TRY TO KNOW YOUR MARKS",
+    navHome: "HOME",
+    navRegister: "REGISTER",
+    navLogin: "LOGIN",
+    navDashboard: "MY DASHBOARD",
+    navLogout: "LOGOUT",
+    homeWelcomeTitle: "Welcome to Tokaberuka Website",
+    homeWelcomeDesc: "This platform helps students enter and check their academic marks, explore all trades & levels, and generate official reports.",
+    btnCreateAccount: "Create Account",
+    btnLogin: "Login",
+    homeTradesTitle: "All Trades & Levels (Click a Trade then a Level to view subjects)",
+    homeTradesDesc: "Select a Trade below, then click a Level (Level 3, Level 4, Level 5) to view Trade modules and General subjects:",
+    chooseLevelIn: "Choose Level in",
+    regTitle: "Student Registration",
+    lblFullName: "Full Name",
+    lblSchoolName: "School Name",
+    lblEmail: "Email",
+    lblPassword: "Password",
+    lblTrade: "Trade",
+    lblLevel: "Level",
+    loginTitle: "Login to Your Account",
+    lblAdminEmail: "Admin Email",
+    lblAdminPass: "Admin Password",
+    studentDashTitle: "Student Dashboard",
+    dashExploreTitle: "Explore All Trades & Levels (All subjects per Level)",
+    dashExploreDesc: "Click a Trade then click a Level (<b>L3</b>, <b>L4</b>, <b>L5</b>) to view all its subjects:",
+    marksFormTitle: "Academic Marks Form (Enter Your Marks Into System)",
+    marksFormDesc: "Enter your marks (0 - 100) for each subject below, then click <b>Save My Marks &amp; Calculate Total</b> to see your Total and generate a Report.",
+    lblStudentName: "Student Name:",
+    lblSchool: "School Name:",
+    lblTradeLevel: "Trade & Level:",
+    btnSaveMarks: "💾 Save My Marks & Calculate Total",
+    btnGenReportLink: "📄 Generate Your Academic Report Automatically",
+    genReportHint: "Clicking here asks for Admin Email and Password so the report is generated and ready to download.",
+    reportReadyTitle: "✅ Your report is ready!",
+    btnDownloadReport: "⬇️ Download Your Marks Report",
+    btnPrintPdf: "🖨️ Print / Save as PDF",
+    adminDashTitle: "Admin Dashboard",
+    adminWelcome: "Welcome, Administrator.",
+    adminInboxTitle: "💬 User Messages (Messages & Replies)",
+    adminInboxDesc: "View all messages sent by users on the site. Type a reply below each thread and click <b>Reply</b>.",
+    manageMarksTitle: "Manage Student Marks",
+    lblSelectStudent: "Select Student",
+    btnSaveUpdateMarks: "SAVE / UPDATE MARKS",
+    regStudentsTitle: "Registered Students",
+    chatLauncher: "💬 Message Admin",
+    chatHeaderTitle: "💬 Chat with Admin",
+    chatHeaderSub: "Write your question, Admin will reply",
+    btnSend: "Send",
+    modalVerifyTitle: "Admin Verification & Report",
+    modalVerifyDesc: "Enter <b>Admin Email</b> and <b>Password</b> to generate the report:",
+    btnCancel: "Cancel",
+    btnVerifyGen: "Verify & Generate Report",
+    footerTitle: "TOKABERUKA WEBSITE ONLINE",
+    footerCopy: "TRY TO KNOW YOUR MARKS © 2026",
+    phGuestName: "Enter your name (e.g. Jean)...",
+    phChatMsg: "Type your message...",
+    chatDefaultGreeting: "Hello! Write your message below, Admin will see it and reply.",
+    replyBtn: "Reply"
+  }
+};
+
+/* =========================================================
+   CURRICULUM DATA: TRADES, LEVELS, TRADE & GENERAL SUBJECTS
+   ========================================================= */
+const CURRICULUM = {
+  NIT: {
+    fullName: "Networking & Internet Technology",
+    levels: {
+      "Level 3": {
+        short: "L3",
+        tradeSubjects: [
+          "Computer Maintenance & Troubleshooting",
+          "Introduction to Computer Networks",
+          "Office Applications & Productivity",
+          "Basic Web Page Authoring"
+        ],
+        generalSubjects: [
+          "Mathematics",
+          "English",
+          "Kinyarwanda",
+          "Entrepreneurship",
+          "ICT Fundamentals"
+        ]
+      },
+      "Level 4": {
+        short: "L4",
+        tradeSubjects: [
+          "Structured Cabling & LAN Setup",
+          "IP Addressing & Routing Basics",
+          "Linux & Windows Server Administration",
+          "Web Development (HTML, CSS, JavaScript)"
+        ],
+        generalSubjects: [
+          "Mathematics",
+          "English",
+          "Physics",
+          "Entrepreneurship",
+          "Citizenship"
+        ]
+      },
+      "Level 5": {
+        short: "L5",
+        tradeSubjects: [
+          "Network Security & Firewall Configuration",
+          "WAN, VPN & Wireless Networking",
+          "Cloud Services & Virtualization",
+          "Database Design & Management"
+        ],
+        generalSubjects: [
+          "Applied Mathematics",
+          "English",
+          "Entrepreneurship",
+          "Communication Skills"
+        ]
+      }
+    }
+  },
+  BDC: {
+    fullName: "Building & Construction",
+    levels: {
+      "Level 3": {
+        short: "L3",
+        tradeSubjects: [
+          "Construction Safety & Site Hygiene",
+          "Masonry & Bricklaying Basics",
+          "Building Materials Identification",
+          "Basic Blueprint Reading"
+        ],
+        generalSubjects: [
+          "Mathematics",
+          "English",
+          "Kinyarwanda",
+          "Entrepreneurship",
+          "ICT"
+        ]
+      },
+      "Level 4": {
+        short: "L4",
+        tradeSubjects: [
+          "Concrete Mixing, Formwork & Reinforcement",
+          "Plastering, Tiling & Finishing",
+          "Setting Out & Levelling",
+          "Quantity Surveying Basics"
+        ],
+        generalSubjects: [
+          "Mathematics",
+          "English",
+          "Physics",
+          "Entrepreneurship",
+          "Citizenship"
+        ]
+      },
+      "Level 5": {
+        short: "L5",
+        tradeSubjects: [
+          "Structural Construction & Site Supervision",
+          "Construction Cost Estimation & Tendering",
+          "Cad & Architectural Drawing",
+          "Quality Control & Building Codes"
+        ],
+        generalSubjects: [
+          "Applied Mathematics",
+          "English",
+          "Entrepreneurship",
+          "Environmental Studies"
+        ]
+      }
+    }
+  },
+  ACCOUNTING: {
+    fullName: "Accounting & Finance",
+    levels: {
+      "Level 3": {
+        short: "L3",
+        tradeSubjects: [
+          "Bookkeeping Fundamentals",
+          "Source Documents & Journal Entries",
+          "Cash Book & Petty Cash Management",
+          "Business Transactions Recording"
+        ],
+        generalSubjects: [
+          "Mathematics",
+          "English",
+          "Kinyarwanda",
+          "Entrepreneurship",
+          "ICT"
+        ]
+      },
+      "Level 4": {
+        short: "L4",
+        tradeSubjects: [
+          "General Ledger & Trial Balance",
+          "Financial Statements Preparation",
+          "Bank Reconciliation",
+          "Payroll & Tax Basics"
+        ],
+        generalSubjects: [
+          "Mathematics",
+          "English",
+          "Economics",
+          "Entrepreneurship",
+          "Citizenship"
+        ]
+      },
+      "Level 5": {
+        short: "L5",
+        tradeSubjects: [
+          "Cost & Management Accounting",
+          "Computerized Accounting (QuickBooks / Sage)",
+          "Auditing & Internal Controls",
+          "Financial Analysis & Budgeting"
+        ],
+        generalSubjects: [
+          "Business Mathematics",
+          "English",
+          "Economics",
+          "Entrepreneurship"
+        ]
+      }
+    }
+  }
+};
+
+/* =========================================================
+   SINGLE ONE-TIME ADMIN CONFIGURATION (FOR ONCE)
+   ========================================================= */
+const FIXED_ADMIN = Object.freeze({
+  id: "admin_main",
+  name: "Administrator",
+  email: "charles@gmail.com",
+  password: "charles2006$",
+  role: "admin",
+  lockedOnce: true
+});
+
+let currentLang = localStorage.getItem("tokaberukaLang") || "rw";
+let currentUser = null;
+let lastGeneratedReport = null;
+let activeHomeTrade = null;
+let activeHomeLevel = null;
+let activeDashTrade = null;
+let activeDashLevel = null;
+let toastTimer = null;
+
+function showToast(message, type = "info") {
+  const banner = document.getElementById("toastBanner");
+  if (!banner) return;
+  banner.textContent = message;
+  banner.className = `toast-banner toast-${type}`;
+  banner.classList.remove("hidden");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    banner.classList.add("hidden");
+  }, 3800);
+}
+
+function getAdminConfig() {
+  return { ...FIXED_ADMIN };
+}
+
+function getUsers() {
+  try {
+    const data = JSON.parse(localStorage.getItem("tokaberukaUsers") || "[]");
+    return Array.isArray(data) ? data : [];
+  } catch (err) {
+    console.error("Error reading users:", err);
+    return [];
+  }
+}
+
+function setUsers(users) {
+  localStorage.setItem("tokaberukaUsers", JSON.stringify(users));
+}
+
+function getMessages() {
+  try {
+    const data = JSON.parse(localStorage.getItem("tokaberukaMessages") || "[]");
+    return Array.isArray(data) ? data : [];
+  } catch (err) {
+    console.error("Error reading messages:", err);
+    return [];
+  }
+}
+
+function setMessages(msgs) {
+  localStorage.setItem("tokaberukaMessages", JSON.stringify(msgs));
+}
+
+function getSubjectsFor(trade, level) {
+  const tradeObj = CURRICULUM[trade];
+  if (!tradeObj || !tradeObj.levels[level]) return [];
+  const lvlObj = tradeObj.levels[level];
+  const tradeItems = lvlObj.tradeSubjects.map(name => ({ name, type: "TRADE" }));
+  const genItems = lvlObj.generalSubjects.map(name => ({ name, type: "GENERAL" }));
+  return [...tradeItems, ...genItems];
+}
+
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = String(text ?? "");
+  return div.innerHTML;
+}
+
+/* =========================================================
+   LANGUAGE & UI HELPERS
+   ========================================================= */
+function t(key) {
+  return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS.en[key] || key;
+}
+
+function setLanguage(lang) {
+  currentLang = lang === "en" ? "en" : "rw";
+  localStorage.setItem("tokaberukaLang", currentLang);
+  document.documentElement.lang = currentLang;
+
+  const btnRw = document.getElementById("btnLangRW");
+  const btnEn = document.getElementById("btnLangEN");
+  if (btnRw) btnRw.classList.toggle("active", currentLang === "rw");
+  if (btnEn) btnEn.classList.toggle("active", currentLang === "en");
+
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const key = el.getAttribute("data-i18n");
+    const val = t(key);
+    if (val.includes("<")) {
+      el.innerHTML = val;
+    } else {
+      el.textContent = val;
+    }
+  });
+
+  const guestInput = document.getElementById("guestSenderName");
+  const chatInput = document.getElementById("userChatInput");
+  if (guestInput) guestInput.placeholder = t("phGuestName");
+  if (chatInput) chatInput.placeholder = t("phChatMsg");
+
+  updateLoginAdminHint();
+  renderUserChatMessages();
+  if (currentUser && currentUser.role === "admin") {
+    renderAdminMessagesInbox();
+  }
+  if (activeHomeTrade && activeHomeLevel) {
+    renderSubjectPanel("homeTradeDetails", activeHomeTrade, activeHomeLevel);
+  }
+  if (activeDashTrade && activeDashLevel) {
+    renderSubjectPanel("dashboardTradeSubjects", activeDashTrade, activeDashLevel);
+  }
+}
+
+function updateLoginAdminHint() {
+  const adminCfg = getAdminConfig();
+  const hint = document.getElementById("loginAdminHint");
+  if (!hint) return;
+  hint.textContent = currentLang === "rw"
+    ? `Admin yashyizweho (for once): ${adminCfg.email}`
+    : `Configured Admin (for once): ${adminCfg.email}`;
+}
+
+function updateAdminHeaderInfo() {
+  const adminCfg = getAdminConfig();
+  const display = document.getElementById("currentAdminDisplay");
+  if (display) {
+    display.textContent = `Active Admin Email: ${adminCfg.email} (Locked Once)`;
+  }
+}
+
+/* =========================================================
+   PAGE NAVIGATION & AUTHENTICATION
+   ========================================================= */
+function showPage(pageId) {
+  const pages = ["home", "register", "login", "studentDashboard", "adminDashboard"];
+  pages.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.add("hidden");
+  });
+
+  const target = document.getElementById(pageId);
+  if (target) {
+    target.classList.remove("hidden");
+  }
+
+  updateNavVisibility();
+
+  if (pageId === "login") {
+    updateLoginAdminHint();
+  } else if (pageId === "studentDashboard") {
+    renderStudentDashboard();
+  } else if (pageId === "adminDashboard") {
+    renderAdminDashboard();
+  }
+}
+
+function updateNavVisibility() {
+  const dashBtn = document.getElementById("navDashboardBtn");
+  const logoutBtn = document.getElementById("navLogoutBtn");
+  if (currentUser) {
+    dashBtn.classList.remove("hidden");
+    logoutBtn.classList.remove("hidden");
+  } else {
+    dashBtn.classList.add("hidden");
+    logoutBtn.classList.add("hidden");
+  }
+}
+
+function goToDashboard() {
+  if (!currentUser) {
+    showPage("login");
+    return;
+  }
+  if (currentUser.role === "admin") {
+    showPage("adminDashboard");
+  } else {
+    showPage("studentDashboard");
+  }
+}
+
+function logout() {
+  currentUser = null;
+  lastGeneratedReport = null;
+  sessionStorage.removeItem("tokaberukaCurrentUser");
+  const dlBox = document.getElementById("downloadReadyBox");
+  if (dlBox) dlBox.classList.add("hidden");
+  updateNavVisibility();
+  showPage("home");
+  showToast(currentLang === "rw" ? "Wasohotse muri konti neza." : "Logged out successfully.", "info");
+}
+
+function populateRegisterLevels(trade) {
+  const levelSelect = document.getElementById("regLevel");
+  if (!levelSelect) return;
+  levelSelect.innerHTML = "";
+
+  if (!trade || !CURRICULUM[trade]) {
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "Select Trade First";
+    levelSelect.appendChild(opt);
+    return;
+  }
+
+  const defaultOpt = document.createElement("option");
+  defaultOpt.value = "";
+  defaultOpt.textContent = "Select Level";
+  levelSelect.appendChild(defaultOpt);
+
+  Object.keys(CURRICULUM[trade].levels).forEach(lvl => {
+    const opt = document.createElement("option");
+    opt.value = lvl;
+    opt.textContent = lvl;
+    levelSelect.appendChild(opt);
+  });
+}
+
+/* =========================================================
+   HOME & DASHBOARD TRADE / LEVEL SUBJECT EXPLORER
+   ========================================================= */
+function selectHomeTrade(trade, event) {
+  if (event) event.preventDefault();
+  if (!CURRICULUM[trade]) return;
+
+  activeHomeTrade = trade;
+  activeHomeLevel = null;
+
+  document.querySelectorAll("#homeTradeLinks .trade-link").forEach(btn => {
+    btn.classList.toggle("active", btn.getAttribute("data-trade") === trade);
+  });
+
+  const levelBar = document.getElementById("homeLevelBar");
+  const label = document.getElementById("homeSelectedTradeLabel");
+  const linksWrap = document.getElementById("homeLevelLinks");
+  const detailsBox = document.getElementById("homeTradeDetails");
+
+  if (label) label.textContent = `${trade} (${CURRICULUM[trade].fullName})`;
+  if (linksWrap) {
+    linksWrap.innerHTML = "";
+    Object.keys(CURRICULUM[trade].levels).forEach(lvl => {
+      const lvlShort = CURRICULUM[trade].levels[lvl].short;
+      const a = document.createElement("a");
+      a.href = `#trade-${trade}-${lvlShort}`;
+      a.className = "level-link";
+      a.textContent = `${lvl} (${lvlShort})`;
+      a.onclick = (e) => selectHomeLevel(trade, lvl, e);
+      linksWrap.appendChild(a);
+    });
+  }
+  if (levelBar) levelBar.classList.remove("hidden");
+  if (detailsBox) {
+    detailsBox.classList.add("hidden");
+    detailsBox.innerHTML = "";
+  }
+}
+
+function selectHomeLevel(trade, level, event) {
+  if (event) event.preventDefault();
+  activeHomeTrade = trade;
+  activeHomeLevel = level;
+
+  document.querySelectorAll("#homeLevelLinks .level-link").forEach(el => {
+    el.classList.toggle("active", el.textContent.startsWith(level));
+  });
+
+  renderSubjectPanel("homeTradeDetails", trade, level);
+}
+
+function selectDashTrade(trade, event) {
+  if (event) event.preventDefault();
+  if (!CURRICULUM[trade]) return;
+
+  activeDashTrade = trade;
+  activeDashLevel = null;
+
+  document.querySelectorAll("#dashTradeLinks .trade-link").forEach(btn => {
+    btn.classList.toggle("active", btn.getAttribute("data-trade") === trade);
+  });
+
+  const levelBar = document.getElementById("dashLevelBar");
+  const label = document.getElementById("dashSelectedTradeLabel");
+  const linksWrap = document.getElementById("dashLevelLinks");
+  const detailsBox = document.getElementById("dashboardTradeSubjects");
+
+  if (label) label.textContent = `${trade} (${CURRICULUM[trade].fullName})`;
+  if (linksWrap) {
+    linksWrap.innerHTML = "";
+    Object.keys(CURRICULUM[trade].levels).forEach(lvl => {
+      const lvlShort = CURRICULUM[trade].levels[lvl].short;
+      const a = document.createElement("a");
+      a.href = `#dash-${trade}-${lvlShort}`;
+      a.className = "level-link";
+      a.textContent = `${lvl} (${lvlShort})`;
+      a.onclick = (e) => selectDashLevel(trade, lvl, e);
+      linksWrap.appendChild(a);
+    });
+  }
+  if (levelBar) levelBar.classList.remove("hidden");
+  if (detailsBox) {
+    detailsBox.classList.add("hidden");
+    detailsBox.innerHTML = "";
+  }
+}
+
+function selectDashLevel(trade, level, event) {
+  if (event) event.preventDefault();
+  activeDashTrade = trade;
+  activeDashLevel = level;
+
+  document.querySelectorAll("#dashLevelLinks .level-link").forEach(el => {
+    el.classList.toggle("active", el.textContent.startsWith(level));
+  });
+
+  renderSubjectPanel("dashboardTradeSubjects", trade, level);
+}
+
+function renderSubjectPanel(containerId, trade, level) {
+  const container = document.getElementById(containerId);
+  const lvlData = CURRICULUM[trade] && CURRICULUM[trade].levels[level];
+  if (!container || !lvlData) return;
+
+  const tradeListHtml = lvlData.tradeSubjects
+    .map(sub => `<li>${escapeHtml(sub)} <span class="badge-core">TRADE</span></li>`)
+    .join("");
+
+  const genListHtml = lvlData.generalSubjects
+    .map(sub => `<li>${escapeHtml(sub)} <span class="badge-gen">GENERAL</span></li>`)
+    .join("");
+
+  container.innerHTML = `
+    <h3>${escapeHtml(trade)} — ${escapeHtml(level)} (${escapeHtml(CURRICULUM[trade].fullName)})</h3>
+    <p class="small" style="margin-bottom:10px">
+      ${currentLang === "rw"
+        ? "Amasomo agize uru rwego agabanyijemo Amasomo y'Umwuga (Trade) n'Amasomo Rusange (General):"
+        : "Subjects in this level are divided into Trade Modules and General Subjects:"}
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+      <div>
+        <h4>${currentLang === "rw" ? "Amasomo y'Umwuga (Trade Subjects)" : "Trade Subjects"}</h4>
+        <ul style="padding-left:20px;line-height:1.8">${tradeListHtml}</ul>
+      </div>
+      <div>
+        <h4>${currentLang === "rw" ? "Amasomo Rusange (General Subjects)" : "General Subjects"}</h4>
+        <ul style="padding-left:20px;line-height:1.8">${genListHtml}</ul>
+      </div>
+    </div>
+  `;
+  container.classList.remove("hidden");
+}
+
+/* =========================================================
+   STUDENT DASHBOARD, MARKS ENTRY & REPORT GENERATION
+   ========================================================= */
+function calculateStudentMetrics(student) {
+  const subjects = getSubjectsFor(student.trade, student.level);
+  const marks = student.marks || {};
+  let total = 0;
+  let count = 0;
+
+  subjects.forEach(sub => {
+    const val = marks[sub.name];
+    if (val !== undefined && val !== null && val !== "" && !Number.isNaN(Number(val))) {
+      total += Number(val);
+      count += 1;
+    }
+  });
+
+  const roundedTotal = Math.round(total * 100) / 100;
+  const average = count > 0 ? Math.round((total / count) * 100) / 100 : null;
+  const passed = average !== null && average >= 50;
+
+  return {
+    total: roundedTotal,
+    average,
+    subjectCount: subjects.length,
+    enteredCount: count,
+    passed
+  };
+}
+
+function renderStudentDashboard() {
+  if (!currentUser || currentUser.role !== "student") return;
+
+  const users = getUsers();
+  const freshStudent = users.find(u => u.id === currentUser.id) || currentUser;
+  currentUser = freshStudent;
+  sessionStorage.setItem("tokaberukaCurrentUser", JSON.stringify(currentUser));
+
+  document.getElementById("studentWelcome").textContent =
+    currentLang === "rw"
+      ? `Murakaza neza, ${freshStudent.name}!`
+      : `Welcome, ${freshStudent.name}!`;
+
+  document.getElementById("studentSchool").textContent =
+    `${t("lblSchool")} ${freshStudent.school}`;
+  document.getElementById("studentTrade").textContent =
+    `Trade: ${freshStudent.trade} (${CURRICULUM[freshStudent.trade]?.fullName || ""})`;
+  document.getElementById("studentLevel").textContent =
+    `Level: ${freshStudent.level}`;
+
+  const metrics = calculateStudentMetrics(freshStudent);
+  document.getElementById("studentTotal").textContent =
+    `Total: ${metrics.total} / ${metrics.subjectCount * 100}`;
+  document.getElementById("studentAverage").textContent =
+    metrics.average !== null
+      ? `Average: ${metrics.average}% (${metrics.enteredCount}/${metrics.subjectCount} subjects)`
+      : `Average: ${currentLang === "rw" ? "Ntiraboneka (Andika amanota)" : "Not available (Enter marks)"}`;
+
+  const statusEl = document.getElementById("studentStatus");
+  if (metrics.average === null) {
+    statusEl.textContent = currentLang === "rw"
+      ? "Imiterere: Utarandika amanota."
+      : "Status: No marks recorded yet.";
+    statusEl.className = "small";
+  } else if (metrics.passed) {
+    statusEl.textContent = currentLang === "rw"
+      ? "Imiterere: Watsinze neza (PASS ≥ 50%)"
+      : "Status: PASSED (≥ 50%)";
+    statusEl.className = "pass";
+  } else {
+    statusEl.textContent = currentLang === "rw"
+      ? "Imiterere: Nturasohoza impuzandengo ya 50% (NEEDS IMPROVEMENT < 50%)"
+      : "Status: BELOW 50% AVERAGE (NEEDS IMPROVEMENT)";
+    statusEl.className = "fail";
+  }
+
+  document.getElementById("formStudentName").textContent = freshStudent.name;
+  document.getElementById("formStudentSchool").textContent = freshStudent.school;
+  document.getElementById("formStudentTradeLevel").textContent = `${freshStudent.trade} - ${freshStudent.level}`;
+
+  renderStudentMarksTable(freshStudent);
+}
+
+function renderStudentMarksTable(student) {
+  const container = document.getElementById("studentResults");
+  if (!container) return;
+
+  const subjects = getSubjectsFor(student.trade, student.level);
+  const marks = student.marks || {};
+
+  let rowsHtml = "";
+  subjects.forEach((sub, idx) => {
+    const badge = sub.type === "TRADE"
+      ? `<span class="badge-core">TRADE</span>`
+      : `<span class="badge-gen">GENERAL</span>`;
+    const existingVal = marks[sub.name] !== undefined && marks[sub.name] !== null ? marks[sub.name] : "";
+
+    rowsHtml += `
+      <tr>
+        <td>${idx + 1}</td>
+        <td>${escapeHtml(sub.name)} ${badge}</td>
+        <td>
+          <input
+            type="number"
+            min="0"
+            max="100"
+            step="0.5"
+            class="student-mark-input"
+            data-subject="${escapeHtml(sub.name)}"
+            value="${escapeHtml(existingVal)}"
+            placeholder="0 - 100"
+          />
+        </td>
+      </tr>
+    `;
+  });
+
+  container.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>${currentLang === "rw" ? "Isomo (Subject)" : "Subject"}</th>
+          <th>${currentLang === "rw" ? "Amanota (/100)" : "Marks (/100)"}</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rowsHtml}
+      </tbody>
+    </table>
+  `;
+}
+
+function saveOwnStudentMarks() {
+  if (!currentUser || currentUser.role !== "student") return;
+
+  const inputs = document.querySelectorAll(".student-mark-input");
+  const updatedMarks = { ...(currentUser.marks || {}) };
+
+  for (const input of inputs) {
+    const subj = input.getAttribute("data-subject");
+    const raw = input.value.trim();
+    if (raw === "") {
+      delete updatedMarks[subj];
+      continue;
+    }
+    const num = Number(raw);
+    if (Number.isNaN(num) || num < 0 || num > 100) {
+      showToast(
+        currentLang === "rw"
+          ? `Amanota ya "${subj}" agomba kuba hagati ya 0 na 100.`
+          : `Mark for "${subj}" must be between 0 and 100.`,
+        "error"
+      );
+      input.focus();
+      return;
+    }
+    updatedMarks[subj] = num;
+  }
+
+  const users = getUsers();
+  const idx = users.findIndex(u => u.id === currentUser.id);
+  if (idx !== -1) {
+    users[idx].marks = updatedMarks;
+    setUsers(users);
+    currentUser = users[idx];
+    sessionStorage.setItem("tokaberukaCurrentUser", JSON.stringify(currentUser));
+  }
+
+  renderStudentDashboard();
+  showToast(
+    currentLang === "rw"
+      ? "Amanota yawe yabitswe neza kandi Total yabazwe!"
+      : "Your marks were saved and Total calculated!",
+    "success"
+  );
+}
+
+/* =========================================================
+   ADMIN VERIFICATION MODAL & REPORT GENERATION
+   ========================================================= */
+function openAdminAuthModal(event) {
+  if (event) event.preventDefault();
+  if (!currentUser || currentUser.role !== "student") {
+    showToast(
+      currentLang === "rw"
+        ? "Banza winjire nka Student kugira ngo ukore report."
+        : "Please log in as a student first to generate a report.",
+      "error"
+    );
+    return;
+  }
+
+  const emailInput = document.getElementById("verifyAdminEmail");
+  const passInput = document.getElementById("verifyAdminPassword");
+  if (emailInput) emailInput.value = "";
+  if (passInput) passInput.value = "";
+
+  document.getElementById("adminAuthModal").classList.remove("hidden");
+  if (emailInput) emailInput.focus();
+}
+
+function closeAdminAuthModal() {
+  document.getElementById("adminAuthModal").classList.add("hidden");
+}
+
+function buildStudentReportData(student, verifiedByEmail) {
+  const subjects = getSubjectsFor(student.trade, student.level);
+  const marks = student.marks || {};
+  const metrics = calculateStudentMetrics(student);
+  const generatedAt = new Date().toLocaleString();
+
+  const lines = [
+    "==========================================================",
+    "          TOKABERUKA WEBSITE ONLINE - ACADEMIC REPORT",
+    "==========================================================",
+    `Generated Date : ${generatedAt}`,
+    `Verified By    : ${verifiedByEmail}`,
+    `Student Name   : ${student.name}`,
+    `School Name    : ${student.school}`,
+    `Trade          : ${student.trade} (${CURRICULUM[student.trade]?.fullName || ""})`,
+    `Level          : ${student.level}`,
+    "----------------------------------------------------------",
+    "SUBJECT                                   | TYPE    | MARKS",
+    "----------------------------------------------------------"
+  ];
+
+  subjects.forEach(sub => {
+    const val = marks[sub.name];
+    const displayMark = (val !== undefined && val !== null && val !== "") ? `${val} / 100` : "N/A";
+    const paddedName = sub.name.padEnd(41, " ").slice(0, 41);
+    const paddedType = sub.type.padEnd(7, " ");
+    lines.push(`${paddedName} | ${paddedType} | ${displayMark}`);
+  });
+
+  lines.push("----------------------------------------------------------");
+  lines.push(`TOTAL MARKS    : ${metrics.total} / ${metrics.subjectCount * 100}`);
+  lines.push(`AVERAGE SCORE  : ${metrics.average !== null ? metrics.average + "%" : "Not Available"}`);
+  lines.push(`STATUS         : ${metrics.average === null ? "PENDING" : (metrics.passed ? "PASSED" : "BELOW 50%")}`);
+  lines.push("==========================================================");
+
+  return {
+    text: lines.join("\n"),
+    fileName: `${student.name.replace(/[^a-zA-Z0-9_-]/g, "_")}_${student.trade}_${student.level.replace(/\s+/g, "")}_Report.txt`,
+    metrics,
+    generatedAt,
+    verifiedByEmail
+  };
+}
+
+function downloadReportFile() {
+  if (!lastGeneratedReport) {
+    showToast(
+      currentLang === "rw" ? "Banza ukore report mbere yo kuyikuramo." : "Generate the report first.",
+      "error"
+    );
+    return;
+  }
+
+  try {
+    const blob = new Blob([lastGeneratedReport.text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = lastGeneratedReport.fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showToast(
+      currentLang === "rw" ? "Report yatangiye gukurwamo (Download)." : "Report download started.",
+      "success"
+    );
+  } catch (err) {
+    console.error("Download error:", err);
+    showToast("Could not download file automatically.", "error");
+  }
+}
+
+function printReportWindow() {
+  if (!lastGeneratedReport || !currentUser) return;
+  const printWin = window.open("", "_blank", "width=760,height=640");
+  if (!printWin) {
+    showToast(
+      currentLang === "rw"
+        ? "Browser ihagaritse popup. Emera popups cyangwa ukoreshe Download."
+        : "Popup blocked by browser. Allow popups or use Download.",
+      "error"
+    );
+    return;
+  }
+
+  printWin.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>TOKABERUKA Academic Report - ${escapeHtml(currentUser.name)}</title>
+      <style>
+        body{font-family:Arial,sans-serif;padding:30px;color:#0f172a}
+        h1{color:#102b50;margin-bottom:4px}
+        .meta{margin-bottom:18px;font-size:14px;line-height:1.6}
+        pre{background:#f8fafc;padding:18px;border:1px solid #cbd5e1;border-radius:8px;white-space:pre-wrap;font-size:13px}
+      </style>
+    </head>
+    <body>
+      <h1>TOKABERUKA WEBSITE ONLINE</h1>
+      <p>Official Academic Marks Summary</p>
+      <div class="meta">
+        <strong>Student:</strong> ${escapeHtml(currentUser.name)}<br>
+        <strong>School:</strong> ${escapeHtml(currentUser.school)}<br>
+        <strong>Trade &amp; Level:</strong> ${escapeHtml(currentUser.trade)} - ${escapeHtml(currentUser.level)}
+      </div>
+      <pre>${escapeHtml(lastGeneratedReport.text)}</pre>
+      <script>window.onload = function(){ window.print(); };<\/script>
+    </body>
+    </html>
+  `);
+  printWin.document.close();
+}
+
+/* =========================================================
+   ADMIN DASHBOARD: STUDENTS, MARKS & MESSAGES INBOX
+   ========================================================= */
+function renderAdminDashboard() {
+  if (!currentUser || currentUser.role !== "admin") return;
+
+  const users = getUsers();
+  document.getElementById("totalStudents").textContent =
+    currentLang === "rw"
+      ? `Abanyeshuri biyandikishije: ${users.length}`
+      : `Registered Students: ${users.length}`;
+
+  updateAdminHeaderInfo();
+  populateAdminStudentSelect(users);
+  renderRegisteredStudentsTable(users);
+  renderAdminMessagesInbox();
+}
+
+function populateAdminStudentSelect(users) {
+  const select = document.getElementById("adminStudent");
+  if (!select) return;
+  const previouslySelected = select.value;
+
+  select.innerHTML = "";
+  const defaultOpt = document.createElement("option");
+  defaultOpt.value = "";
+  defaultOpt.textContent = currentLang === "rw" ? "-- Hitamo umunyeshuri --" : "-- Select student --";
+  select.appendChild(defaultOpt);
+
+  users.forEach(u => {
+    const opt = document.createElement("option");
+    opt.value = u.id;
+    opt.textContent = `${u.name} (${u.trade} - ${u.level})`;
+    select.appendChild(opt);
+  });
+
+  if (previouslySelected && users.some(u => u.id === previouslySelected)) {
+    select.value = previouslySelected;
+    loadStudentMarks();
+  } else {
+    document.getElementById("adminStudentResults").innerHTML = "";
+  }
+}
+
+function loadStudentMarks() {
+  const select = document.getElementById("adminStudent");
+  const container = document.getElementById("adminStudentResults");
+  if (!select || !container) return;
+
+  const studentId = select.value;
+  if (!studentId) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const student = getUsers().find(u => u.id === studentId);
+  if (!student) {
+    container.innerHTML = "";
+    return;
+  }
+
+  const subjects = getSubjectsFor(student.trade, student.level);
+  const marks = student.marks || {};
+
+  let rows = "";
+  subjects.forEach((sub, i) => {
+    const val = marks[sub.name] !== undefined && marks[sub.name] !== null ? marks[sub.name] : "";
+    const badge = sub.type === "TRADE"
+      ? `<span class="badge-core">TRADE</span>`
+      : `<span class="badge-gen">GENERAL</span>`;
+    rows += `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${escapeHtml(sub.name)} ${badge}</td>
+        <td>
+          <input
+            type="number"
+            min="0"
+            max="100"
+            step="0.5"
+            class="admin-mark-input"
+            data-subject="${escapeHtml(sub.name)}"
+            value="${escapeHtml(val)}"
+            placeholder="0 - 100"
+          />
+        </td>
+      </tr>
+    `;
+  });
+
+  container.innerHTML = `
+    <p class="small" style="margin-top:10px">
+      <b>${escapeHtml(student.name)}</b> — ${escapeHtml(student.school)} (${escapeHtml(student.trade)} / ${escapeHtml(student.level)})
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Subject</th>
+          <th>Marks (/100)</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function saveAllMarks() {
+  const select = document.getElementById("adminStudent");
+  if (!select || !select.value) {
+    showToast(
+      currentLang === "rw" ? "Banza uhitemo umunyeshuri." : "Please select a student first.",
+      "error"
+    );
+    return;
+  }
+
+  const inputs = document.querySelectorAll(".admin-mark-input");
+  const updatedMarks = {};
+
+  for (const input of inputs) {
+    const subj = input.getAttribute("data-subject");
+    const raw = input.value.trim();
+    if (raw === "") continue;
+    const num = Number(raw);
+    if (Number.isNaN(num) || num < 0 || num > 100) {
+      showToast(
+        currentLang === "rw"
+          ? `Amanota ya "${subj}" agomba kuba hagati ya 0 na 100.`
+          : `Mark for "${subj}" must be between 0 and 100.`,
+        "error"
+      );
+      input.focus();
+      return;
+    }
+    updatedMarks[subj] = num;
+  }
+
+  const users = getUsers();
+  const idx = users.findIndex(u => u.id === select.value);
+  if (idx !== -1) {
+    users[idx].marks = updatedMarks;
+    setUsers(users);
+    renderRegisteredStudentsTable(users);
+    showToast(
+      currentLang === "rw"
+        ? `Amanota ya ${users[idx].name} yabitswe neza.`
+        : `Marks saved for ${users[idx].name}.`,
+      "success"
+    );
+  }
+}
+
+function renderRegisteredStudentsTable(users) {
+  const container = document.getElementById("studentsList");
+  if (!container) return;
+
+  if (!users.length) {
+    container.innerHTML = `<p class="small">${currentLang === "rw" ? "Nta munyeshuri uriyandikisha." : "No students registered yet."}</p>`;
+    return;
+  }
+
+  const rows = users.map((u, idx) => {
+    const metrics = calculateStudentMetrics(u);
+    const avgText = metrics.average !== null ? `${metrics.average}%` : "—";
+    return `
+      <tr>
+        <td>${idx + 1}</td>
+        <td>${escapeHtml(u.name)}</td>
+        <td>${escapeHtml(u.school)}</td>
+        <td>${escapeHtml(u.email)}</td>
+        <td>${escapeHtml(u.trade)}</td>
+        <td>${escapeHtml(u.level)}</td>
+        <td>${metrics.total}</td>
+        <td>${avgText}</td>
+      </tr>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>School</th>
+          <th>Email</th>
+          <th>Trade</th>
+          <th>Level</th>
+          <th>Total</th>
+          <th>Average</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+/* =========================================================
+   USER CHAT WIDGET & ADMIN MESSAGES INBOX
+   ========================================================= */
+function getActiveThreadId() {
+  if (currentUser && currentUser.role === "student") {
+    return `student_${currentUser.id}`;
+  }
+  const nameVal = (document.getElementById("guestSenderName")?.value || "").trim();
+  const savedGuestId = sessionStorage.getItem("tokaberukaGuestThreadId");
+  if (savedGuestId) return savedGuestId;
+
+  const slug = (nameVal || "visitor").toLowerCase().replace(/[^a-z0-9]+/g, "_");
+  const newId = `guest_${slug}_${Date.now().toString().slice(-5)}`;
+  sessionStorage.setItem("tokaberukaGuestThreadId", newId);
+  return newId;
+}
+
+function getActiveSenderName() {
+  if (currentUser && currentUser.role === "student") {
+    return currentUser.name;
+  }
+  const inputVal = (document.getElementById("guestSenderName")?.value || "").trim();
+  if (inputVal) {
+    sessionStorage.setItem("tokaberukaGuestName", inputVal);
+    return inputVal;
+  }
+  return sessionStorage.getItem("tokaberukaGuestName") || (currentLang === "rw" ? "Umusura (Visitor)" : "Visitor");
+}
+
+function toggleChatWidget() {
+  const widget = document.getElementById("userChatWidget");
+  if (!widget) return;
+  const isOpening = widget.classList.contains("hidden");
+  widget.classList.toggle("hidden");
+
+  if (isOpening) {
+    const savedName = sessionStorage.getItem("tokaberukaGuestName");
+    const nameInput = document.getElementById("guestSenderName");
+    if (nameInput && savedName && !nameInput.value) {
+      nameInput.value = savedName;
+    }
+    markThreadRepliesAsRead();
+    renderUserChatMessages();
+    const msgInput = document.getElementById("userChatInput");
+    if (msgInput) msgInput.focus();
+  }
+}
+
+function markThreadRepliesAsRead() {
+  const threadId = getActiveThreadId();
+  const msgs = getMessages();
+  let changed = false;
+  msgs.forEach(m => {
+    if (m.threadId === threadId && m.senderRole === "admin" && !m.readByUser) {
+      m.readByUser = true;
+      changed = true;
+    }
+  });
+  if (changed) {
+    setMessages(msgs);
+  }
+  updateUserUnreadBadge();
+}
+
+function updateUserUnreadBadge() {
+  const badge = document.getElementById("userUnreadBadge");
+  if (!badge) return;
+  const threadId = getActiveThreadId();
+  const unreadCount = getMessages().filter(
+    m => m.threadId === threadId && m.senderRole === "admin" && !m.readByUser
+  ).length;
+
+  if (unreadCount > 0) {
+    badge.textContent = String(unreadCount);
+    badge.classList.remove("hidden");
+  } else {
+    badge.classList.add("hidden");
+  }
+}
+
+function sendUserMessage() {
+  const input = document.getElementById("userChatInput");
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  const threadId = getActiveThreadId();
+  const senderName = getActiveSenderName();
+  const msgs = getMessages();
+
+  msgs.push({
+    id: `msg_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+    threadId,
+    senderName,
+    senderRole: currentUser && currentUser.role === "student" ? "student" : "guest",
+    text,
+    time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    readByAdmin: false,
+    readByUser: true
+  });
+
+  setMessages(msgs);
+  input.value = "";
+  renderUserChatMessages();
+  if (currentUser && currentUser.role === "admin") {
+    renderAdminMessagesInbox();
+  }
+}
+
+function renderUserChatMessages() {
+  const body = document.getElementById("userChatMessages");
+  if (!body) return;
+
+  const threadId = getActiveThreadId();
+  const threadMsgs = getMessages().filter(m => m.threadId === threadId);
+
+  if (!threadMsgs.length) {
+    body.innerHTML = `
+      <div class="msg-bubble msg-admin">
+        ${escapeHtml(t("chatDefaultGreeting"))}
+        <span class="msg-meta">TOKABERUKA</span>
+      </div>
+    `;
+    return;
+  }
+
+  body.innerHTML = threadMsgs.map(m => {
+    const isAdmin = m.senderRole === "admin";
+    return `
+      <div class="msg-bubble ${isAdmin ? "msg-admin" : "msg-user"}">
+        <div>${escapeHtml(m.text)}</div>
+        <span class="msg-meta">${escapeHtml(isAdmin ? "Admin" : m.senderName)} • ${escapeHtml(m.time)}</span>
+      </div>
+    `;
+  }).join("");
+
+  body.scrollTop = body.scrollHeight;
+}
+
+function renderAdminMessagesInbox() {
+  const container = document.getElementById("adminMessagesContainer");
+  if (!container) return;
+
+  const msgs = getMessages();
+  if (!msgs.length) {
+    container.innerHTML = `<p class="small">${currentLang === "rw" ? "Nta butumwa buragera hano." : "No user messages yet."}</p>`;
+    return;
+  }
+
+  const threadsMap = new Map();
+  msgs.forEach(m => {
+    if (!threadsMap.has(m.threadId)) {
+      threadsMap.set(m.threadId, {
+        threadId: m.threadId,
+        senderName: m.senderName || "Visitor",
+        items: [],
+        hasUnread: false
+      });
+    }
+    const th = threadsMap.get(m.threadId);
+    if (m.senderRole !== "admin" && m.senderName) {
+      th.senderName = m.senderName;
+    }
+    if (m.senderRole !== "admin" && !m.readByAdmin) {
+      th.hasUnread = true;
+    }
+    th.items.push(m);
+  });
+
+  const threads = Array.from(threadsMap.values()).reverse();
+
+  container.innerHTML = threads.map(th => {
+    const historyHtml = th.items.map(item => {
+      const isAdmin = item.senderRole === "admin";
+      return `
+        <div class="msg-bubble ${isAdmin ? "msg-admin" : "msg-user"}">
+          <div>${escapeHtml(item.text)}</div>
+          <span class="msg-meta">${escapeHtml(isAdmin ? "Admin" : item.senderName)} • ${escapeHtml(item.time)}</span>
+        </div>
+      `;
+    }).join("");
+
+    const safeThreadId = escapeHtml(th.threadId);
+
+    return `
+      <div class="admin-msg-thread ${th.hasUnread ? "unread" : ""}">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+          <strong>${escapeHtml(th.senderName)}</strong>
+          <span class="small">${th.hasUnread ? (currentLang === "rw" ? "🔴 Bushya" : "🔴 New") : ""}</span>
+        </div>
+        <div class="admin-thread-history">${historyHtml}</div>
+        <div class="chat-input-row">
+          <input type="text" id="replyInput_${safeThreadId}" placeholder="${currentLang === "rw" ? "Andika igisubizo cya Admin..." : "Type admin reply..."}" onkeydown="if(event.key==='Enter'){event.preventDefault();sendAdminReply('${safeThreadId}');}" />
+          <button type="button" onclick="sendAdminReply('${safeThreadId}')">${escapeHtml(t("replyBtn"))}</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function sendAdminReply(threadId) {
+  const input = document.getElementById(`replyInput_${threadId}`);
+  if (!input) return;
+  const replyText = input.value.trim();
+  if (!replyText) return;
+
+  const msgs = getMessages();
+  msgs.forEach(m => {
+    if (m.threadId === threadId && m.senderRole !== "admin") {
+      m.readByAdmin = true;
+    }
+  });
+
+  msgs.push({
+    id: `msg_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+    threadId,
+    senderName: "Admin",
+    senderRole: "admin",
+    text: replyText,
+    time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    readByAdmin: true,
+    readByUser: false
+  });
+
+  setMessages(msgs);
+  input.value = "";
+  renderAdminMessagesInbox();
+  renderUserChatMessages();
+  updateUserUnreadBadge();
+  showToast(
+    currentLang === "rw" ? "Igisubizo cyoherejwe neza." : "Reply sent successfully.",
+    "success"
+  );
+}
+
+/* =========================================================
+   FORM EVENT LISTENERS & INITIALIZATION
+   ========================================================= */
+function handleLoginSubmission(e) {
+  if (e) e.preventDefault();
+
+  const emailEl = document.getElementById("loginEmail");
+  const passEl = document.getElementById("loginPassword");
+  const email = (emailEl ? emailEl.value : "").trim().toLowerCase();
+  const password = (passEl ? passEl.value : "").trim();
+
+  if (!email || !password) {
+    showToast(
+      currentLang === "rw"
+        ? "Andika Email na Password mbere yo gukanda Login."
+        : "Please enter both Email and Password.",
+      "error"
+    );
+    return;
+  }
+
+  const adminCfg = getAdminConfig();
+  if (email === adminCfg.email.toLowerCase() && password === adminCfg.password) {
+    currentUser = {
+      id: adminCfg.id,
+      name: adminCfg.name,
+      email: adminCfg.email,
+      password: adminCfg.password,
+      role: "admin"
+    };
+    sessionStorage.setItem("tokaberukaCurrentUser", JSON.stringify(currentUser));
+    if (emailEl) emailEl.value = "";
+    if (passEl) passEl.value = "";
+    showToast(
+      currentLang === "rw" ? "Winjiye nka Admin neza!" : "Logged in as Administrator!",
+      "success"
+    );
+    showPage("adminDashboard");
+    return;
+  }
+
+  const users = getUsers();
+  const student = users.find(
+    u => u.email.toLowerCase() === email && String(u.password).trim() === password
+  );
+
+  if (student) {
+    currentUser = student;
+    sessionStorage.setItem("tokaberukaCurrentUser", JSON.stringify(currentUser));
+    if (emailEl) emailEl.value = "";
+    if (passEl) passEl.value = "";
+    showToast(
+      currentLang === "rw"
+        ? `Murakaza neza, ${student.name}!`
+        : `Welcome back, ${student.name}!`,
+      "success"
+    );
+    showPage("studentDashboard");
+    return;
+  }
+
+  showToast(
+    currentLang === "rw"
+      ? "Email cyangwa Password si byo. Ongera ugerageze."
+      : "Invalid email or password. Please try again.",
+    "error"
+  );
+}
+
+document.getElementById("registerForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const name = document.getElementById("regName").value.trim();
+  const school = document.getElementById("regSchool").value.trim();
+  const email = document.getElementById("regEmail").value.trim().toLowerCase();
+  const password = document.getElementById("regPassword").value;
+  const trade = document.getElementById("regTrade").value;
+  const level = document.getElementById("regLevel").value;
+
+  if (!name || !school || !email || !password || !trade || !level) {
+    showToast(
+      currentLang === "rw" ? "Uzuza amakuru yose asabwa." : "Please fill in all required fields.",
+      "error"
+    );
+    return;
+  }
+
+  const users = getUsers();
+  if (users.some(u => u.email.toLowerCase() === email)) {
+    showToast(
+      currentLang === "rw"
+        ? "Iyi Email isanzwe ikoreshwa n'undi munyeshuri."
+        : "This email is already registered.",
+      "error"
+    );
+    return;
+  }
+
+  const newStudent = {
+    id: `stu_${Date.now()}`,
+    name,
+    school,
+    email,
+    password,
+    trade,
+    level,
+    role: "student",
+    marks: {}
+  };
+
+  users.push(newStudent);
+  setUsers(users);
+
+  currentUser = newStudent;
+  sessionStorage.setItem("tokaberukaCurrentUser", JSON.stringify(currentUser));
+  this.reset();
+  populateRegisterLevels("");
+
+  showToast(
+    currentLang === "rw"
+      ? `Konti ya ${name} yafunguwe neza!`
+      : `Account created for ${name}!`,
+    "success"
+  );
+  showPage("studentDashboard");
+});
+
+document.getElementById("loginForm").addEventListener("submit", handleLoginSubmission);
+
+document.getElementById("adminVerifyForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  if (!currentUser || currentUser.role !== "student") return;
+
+  const inputEmail = document.getElementById("verifyAdminEmail").value.trim().toLowerCase();
+  const inputPass = document.getElementById("verifyAdminPassword").value.trim();
+  const adminCfg = getAdminConfig();
+
+  if (inputEmail !== adminCfg.email.toLowerCase() || inputPass !== adminCfg.password) {
+    showToast(
+      currentLang === "rw"
+        ? "Admin Email cyangwa Password ntibihuye!"
+        : "Admin Email or Password does not match!",
+      "error"
+    );
+    return;
+  }
+
+  lastGeneratedReport = buildStudentReportData(currentUser, adminCfg.email);
+  closeAdminAuthModal();
+
+  const dlBox = document.getElementById("downloadReadyBox");
+  const summaryText = document.getElementById("downloadSummaryText");
+  if (summaryText) {
+    summaryText.textContent =
+      currentLang === "rw"
+        ? `Umunyeshuri: ${currentUser.name} | Total: ${lastGeneratedReport.metrics.total} | Average: ${lastGeneratedReport.metrics.average !== null ? lastGeneratedReport.metrics.average + "%" : "N/A"}`
+        : `Student: ${currentUser.name} | Total: ${lastGeneratedReport.metrics.total} | Average: ${lastGeneratedReport.metrics.average !== null ? lastGeneratedReport.metrics.average + "%" : "N/A"}`;
+  }
+  if (dlBox) dlBox.classList.remove("hidden");
+
+  showToast(
+    currentLang === "rw"
+      ? "Report yemejwe kandi yatunganyijwe neza!"
+      : "Admin verified and report generated!",
+    "success"
+  );
+});
+
+/* =========================================================
+   BOOT APPLICATION ON LOAD
+   ========================================================= */
+window.addEventListener("DOMContentLoaded", function() {
+  localStorage.setItem("tokaberukaAdmin", JSON.stringify(FIXED_ADMIN));
+  if (!localStorage.getItem("tokaberukaUsers")) {
+    setUsers([]);
+  }
+  if (!localStorage.getItem("tokaberukaMessages")) {
+    setMessages([]);
+  }
+
+  try {
+    const savedSession = sessionStorage.getItem("tokaberukaCurrentUser");
+    if (savedSession) {
+      currentUser = JSON.parse(savedSession);
+    }
+  } catch (err) {
+    currentUser = null;
+  }
+
+  setLanguage(currentLang);
+  updateNavVisibility();
+  updateUserUnreadBadge();
+  renderUserChatMessages();
+  showPage("home");
+});
+</script>
+
+</body>
+</html>
